@@ -10,6 +10,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { useState } from 'react';
 import Register from 'features/auth/components/register/Register';
+import { IconButton } from '@material-ui/core';
+import { Close } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,6 +22,14 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+  },
+
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(0),
+    top: theme.spacing(0),
+    color: theme.palette.grey[500],
+    width: 0,
   },
 }));
 
@@ -61,14 +71,15 @@ export default function Header() {
         disableEscapeKeyDown
         aria-labelledby="form-dialog-title"
       >
-        <DialogContent>
-          <Register />
-        </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
+          <IconButton classes={classes.closeButton} onClick={handleClose}>
+            <Close />
+          </IconButton>
         </DialogActions>
+
+        <DialogContent>
+          <Register closeDialog={handleClose} />
+        </DialogContent>
       </Dialog>
     </div>
   );

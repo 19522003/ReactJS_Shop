@@ -3,13 +3,14 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Avatar, Button, Typography, makeStyles } from '@material-ui/core';
+import { Avatar, Button, LinearProgress, Typography, makeStyles } from '@material-ui/core';
 import { LockOutlined } from '@material-ui/icons';
 import PasswordField from 'components/passwordField/PasswordField';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(1),
+    position: 'relative',
   },
   avatar: {
     margin: '0 auto',
@@ -21,6 +22,12 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(2, 0),
+  },
+  progress: {
+    position: 'absolute',
+    top: theme.spacing(1),
+    left: 0,
+    right: 0,
   },
 }));
 
@@ -52,12 +59,16 @@ function RegisterForm(props) {
 
   const classes = useStyles();
 
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     const { onSubmit } = props;
-    if (onSubmit) onSubmit(values);
+    if (onSubmit) await onSubmit(values);
   };
+
+  const { isSubmitting } = form.formState;
+
   return (
     <div className={classes.root}>
+      {isSubmitting && <LinearProgress className={classes.progress} />}
       <Avatar className={classes.avatar}>
         <LockOutlined></LockOutlined>
       </Avatar>
@@ -70,7 +81,14 @@ function RegisterForm(props) {
         <PasswordField name="password" label="Password" form={form} />
         <PasswordField name="retypePassword" label="Retype Password" form={form} />
 
-        <Button type="submit" className={classes.submit} variant="contained" color="primary" fullWidth>
+        <Button
+          disabled={isSubmitting}
+          type="submit"
+          className={classes.submit}
+          variant="contained"
+          color="primary"
+          fullWidth
+        >
           Create
         </Button>
       </form>
