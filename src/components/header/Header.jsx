@@ -68,7 +68,7 @@ export default function Header() {
             </Button>
           )}
           {isLoggedIn && (
-            <IconButton>
+            <IconButton color="inherit">
               <AccountCircle />
             </IconButton>
           )}
