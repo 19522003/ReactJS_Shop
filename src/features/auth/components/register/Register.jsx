@@ -15,14 +15,12 @@ function Register(props) {
 
       const action = register(value);
       const resultAction = await dispatch(action);
-      console.log(resultAction);
-      const user = unwrapResult(resultAction);
+      unwrapResult(resultAction);
 
       const { closeDialog } = props;
       if (closeDialog) closeDialog();
 
       enqueueSnackbar('Register successfully', { variant: 'success' });
-      console.log('New user', user);
     } catch (error) {
       enqueueSnackbar(error.message, { variant: 'error' });
       console.log('Failed to register', error);

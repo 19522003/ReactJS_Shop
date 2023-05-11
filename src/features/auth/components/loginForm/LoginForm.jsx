@@ -33,13 +33,13 @@ const useStyles = makeStyles((theme) => ({
 
 function LoginForm(props) {
   const schema = yup.object().shape({
-    indentifier: yup.string().required('This field is required').email('Enter a valid email address'),
+    identifier: yup.string().required('This field is required').email('Enter a valid email address'),
     password: yup.string().required('This field is required'),
   });
 
   const form = useForm({
     defaultValues: {
-      indentifier: '',
+      identifier: '',
       password: '',
     },
     resolver: yupResolver(schema),
@@ -61,13 +61,11 @@ function LoginForm(props) {
         <LockOutlined></LockOutlined>
       </Avatar>
       <Typography className={classes.title} component="h3" variant="h5">
-        Create An Account
+        Sign in
       </Typography>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <InputField name="fullName" label="Full Name" form={form} />
-        <InputField name="email" label="Email" form={form} />
+        <InputField name="identifier" label="Email" form={form} />
         <PasswordField name="password" label="Password" form={form} />
-        <PasswordField name="retypePassword" label="Retype Password" form={form} />
 
         <Button
           disabled={isSubmitting}
@@ -77,7 +75,7 @@ function LoginForm(props) {
           color="primary"
           fullWidth
         >
-          Create
+          Sign in
         </Button>
       </form>
     </div>
