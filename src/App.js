@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.css';
 import Header from 'components/header/Header';
-import { Switch } from 'react-router-dom';
-import { Redirect, Route } from 'react-router-dom/cjs/react-router-dom.min';
+import { Route, Switch } from 'react-router-dom';
 import CounterFeature from 'features/counter';
+import ProductFeature from 'features/product';
 
 function App() {
   return (
@@ -11,8 +11,8 @@ function App() {
       <Header />
 
       <Switch>
-        <Redirect from="/home" to="/" exact />
-        <Route path="/" component={CounterFeature}></Route>
+        <Route exact path="/" component={CounterFeature} />
+        <Route path="/products" component={ProductFeature} />
       </Switch>
     </div>
   );

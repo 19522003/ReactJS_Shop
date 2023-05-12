@@ -10,10 +10,11 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { useState } from 'react';
 import Register from 'features/auth/components/register/Register';
-import { Box, IconButton } from '@material-ui/core';
+import { Box, IconButton, Menu, MenuItem } from '@material-ui/core';
 import { AccountCircle, Close } from '@material-ui/icons';
 import Login from 'features/auth/components/login/Login';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from 'features/auth/userSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,10 +40,12 @@ const MODE = {
   REGISTER: 'register',
 };
 export default function Header() {
+  const dispatch = useDispatch();
   const loggedInUser = useSelector((state) => state.user.current);
   const isLoggedIn = !!loggedInUser.id;
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState(MODE.LOGIN);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -51,6 +54,19 @@ export default function Header() {
   const handleClose = () => {
     setOpen(false);
   };
+  const handleUserClick = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogoutClick = () => {
+    const action = logout();
+    dispatch(action);
+  };
+
   const classes = useStyles();
 
   return (
@@ -68,13 +84,31 @@ export default function Header() {
             </Button>
           )}
           {isLoggedIn && (
-            <IconButton color="inherit">
+            <IconButton color="inherit" onClick={handleUserClick}>
               <AccountCircle />
             </IconButton>
           )}
         </Toolbar>
       </AppBar>
 
+      <Menu
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        getContentAnchorEl={null}
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleCloseMenu}
+      >
+        <MenuItem onClick={handleCloseMenu}>My account</MenuItem>
+        <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
+      </Menu>
       <Dialog
         open={open}
         onClose={handleClose}
