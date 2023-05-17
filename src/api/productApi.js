@@ -18,6 +18,10 @@ const productApi = {
       },
     };
   },
+  async get(id) {
+    const product = await axiosClient.get(`/products/${id}`);
+    return product;
+  },
 };
 
 export default productApi;
