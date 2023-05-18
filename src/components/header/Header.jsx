@@ -10,11 +10,14 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { useState } from 'react';
 import Register from 'features/auth/components/register/Register';
-import { Box, IconButton, Menu, MenuItem } from '@material-ui/core';
-import { AccountCircle, Close } from '@material-ui/icons';
+import { Badge, Box, IconButton, Menu, MenuItem } from '@material-ui/core';
+import { AccountCircle, Close, ShoppingCart } from '@material-ui/icons';
 import Login from 'features/auth/components/login/Login';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from 'features/auth/userSlice';
+import { Link } from 'react-router-dom';
+import { cartItemsCountSelector } from 'features/cart/selectors';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,8 +44,10 @@ const MODE = {
 };
 export default function Header() {
   const dispatch = useDispatch();
+  const cartItemCount = useSelector(cartItemsCountSelector);
   const loggedInUser = useSelector((state) => state.user.current);
   const isLoggedIn = !!loggedInUser.id;
+  const history = useHistory();
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState(MODE.LOGIN);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -67,6 +72,10 @@ export default function Header() {
     dispatch(action);
   };
 
+  const handleCartClick = () => {
+    history.push('/cart');
+  };
+
   const classes = useStyles();
 
   return (
@@ -75,14 +84,26 @@ export default function Header() {
         <Toolbar>
           <CodeIcon className={classes.menuButton} />
           <Typography variant="h6" className={classes.title}>
-            Shop
+            <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
+              Shop
+            </Link>
           </Typography>
+          <Button color="inherit">
+            <Link to="/products" style={{ color: 'white', textDecoration: 'none' }}>
+              Products
+            </Link>
+          </Button>
 
           {!isLoggedIn && (
             <Button color="inherit" onClick={handleClickOpen}>
               Login
             </Button>
           )}
+          <IconButton onClick={handleCartClick} aria-label="show 4 new mails" color="inherit">
+            <Badge badgeContent={cartItemCount} color="secondary">
+              <ShoppingCart />
+            </Badge>
+          </IconButton>
           {isLoggedIn && (
             <IconButton color="inherit" onClick={handleUserClick}>
               <AccountCircle />
